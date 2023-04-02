@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "212196104981",
+    "project_id": "appuno-cae20",
+    "storage_bucket": "appuno-cae20.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212196104981:android:45f99ce1f18649506f671c",
+        "android_client_info": {
+          "package_name": "com.example.app_uno"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212196104981-sn4u3prpnk0ncuor88s337g27n8uhce8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app_uno",
+            "certificate_hash": "cf41fe444d474d17bb9e9a898910c3e4eb613633"
+          }
+        },
+        {
+          "client_id": "212196104981-p3pd9ic4b69hb1faj8jli113b9mifref.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDac80oOSed9tUiot1_MBdHSSEtOQg_axI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212196104981-p3pd9ic4b69hb1faj8jli113b9mifref.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
