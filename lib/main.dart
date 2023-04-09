@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
         // brightness:Brightness.dark
         scaffoldBackgroundColor: const Color.fromARGB(255, 58, 58, 58),
       ),
-      home: const HomePractica(),
-      // const HomeAlternative(),
+      home: 
+      const HomeAlternative(),
     );
   }
 }
