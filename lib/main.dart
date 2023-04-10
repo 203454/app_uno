@@ -1,3 +1,4 @@
+import 'package:app_uno/pages/HomeLogin.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -22,15 +23,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 255, 13, 13),
+          backgroundColor: Color.fromARGB(255, 62, 56, 144),
         ),
         // primarySwatch: Colors.red,
         // primarySwatch: Colors.blue,
         // brightness:Brightness.dark
-        scaffoldBackgroundColor: const Color.fromARGB(255, 58, 58, 58),
+        scaffoldBackgroundColor:Color.fromARGB(255, 43, 39, 98),
       ),
       home: 
-      const HomeAlternative(),
+       HomeLogin(),
     );
   }
 }

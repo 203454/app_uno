@@ -21,10 +21,10 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       // Realiza la petición HTTP DELETE
       await dio.delete('http://192.168.0.14:8000/api/books/$id/',
           options: Options(
-              sendTimeout: Duration(milliseconds: 2500),
-              receiveTimeout: Duration(milliseconds: 2500)));
+              sendTimeout: const Duration(milliseconds: 2500),
+              receiveTimeout:const Duration(milliseconds: 2500)));
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Libro eliminado exitosamente'),
         ),
       );

@@ -31,7 +31,7 @@ class _HomePracticaState extends State<HomePractica> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 3, 255, 226),
+        backgroundColor:const Color.fromARGB(255, 58, 64, 106),
         title: const Text("Home Practica"),
         elevation: 8.0,
         leading: IconButton(

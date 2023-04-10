@@ -40,113 +40,143 @@ class _BookListPageState extends State<BookListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: GridView.count(
-          crossAxisCount: 1,
-          childAspectRatio: 2,
-          children: List.generate(books.length, (index) {
-            return SizedBox(
-              // width: 200.0,
-              height: 50.0,
-              child: GestureDetector(
-                  onTap: () {
-                    // navigateBookDetail(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            BookDetailScreen(book: books[index]),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    margin: const EdgeInsets.all(8),
-                    color: Colors.grey[900],
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Imagen a la izquierda
-                          Container(
-                            width: 90.0,
-                            height: 160.0,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(books[index]
-                                    ['portada']), // URL de la imagen
-                                fit: BoxFit.cover,
-                              ),
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color.fromARGB(255, 255, 255, 255),
+                Color.fromARGB(255, 201, 201, 201), // Color superior del gradiente
+                Color.fromARGB(255, 169, 169, 169), // Color inferior del gradiente
+              ],
+            ),
+          ),
+          child: GridView.count(
+            crossAxisCount: 1,
+            childAspectRatio: 2,
+            children: List.generate(books.length, (index) {
+              return SizedBox(
+                // width: 200.0,
+                height: 50.0,
+                child: GestureDetector(
+                    onTap: () {
+                      // navigateBookDetail(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              BookDetailScreen(book: books[index]),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      elevation: 10,
+                      margin: const EdgeInsets.all(8),
+                      // color: Color.fromARGB(255, 218, 222, 255),
+                      child: Padding(
+                        padding: const EdgeInsets.all(0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Color.fromARGB(255, 69, 32, 105), // Color inicial
+                                Color.fromARGB(255, 151, 70, 233), // Color final
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 10.0),
-                          // Contenido a la derecha
-                          Expanded(
-                            child: Column(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  books[index]['titulo'],
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
+                                // Imagen a la izquierda
+                                Container(
+                                  width: 90.0,
+                                  height: 160.0,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage(books[index]
+                                          ['portada']), // URL de la imagen
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(height: 10.0),
-                                Text(
-                                  books[index]['autor'],
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                  ),
-                                ),
-                                const SizedBox(height: 10.0),
-                                Text(
-                                  books[index]['nCapitulos'].toString(),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                  ),
-                                ),
-                                const SizedBox(height: 10.0),
-                                Text(
-                                  books[index]['status']
-                                      ? 'Disponible'
-                                      : 'No Disponible',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: books[index]['status']
-                                        ? Colors.greenAccent
-                                        : Colors.redAccent,
-                                    fontSize: 14.0,
-                                  ),
-                                ),
-                                const SizedBox(height: 10.0),
-                                Text(
-                                  books[index]['created_at'],
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 14.0,
+                                const SizedBox(width: 10.0),
+                                // Contenido a la derecha
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        books[index]['titulo'],
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10.0),
+                                      Text(
+                                        books[index]['autor'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10.0),
+                                      Text(
+                                        books[index]['nCapitulos'].toString(),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10.0),
+                                      Text(
+                                        books[index]['status']
+                                            ? 'Disponible'
+                                            : 'No Disponible',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: books[index]['status']
+                                              ? Colors.greenAccent
+                                              : Colors.redAccent,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10.0),
+                                      Text(
+                                        books[index]['created_at'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  )),
-            );
-          }),
+                    )),
+              );
+            }),
+          ),
         ),
         floatingActionButton:
             Column(mainAxisAlignment: MainAxisAlignment.end, children: [
