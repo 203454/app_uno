@@ -22,9 +22,9 @@ class HomeLogin extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color.fromARGB(255, 98, 99, 195),
-              Color.fromARGB(255, 5, 198, 195), // Color superior del gradiente
-              Color.fromARGB(255, 76, 93, 105), // Color inferior del gradiente
+              Color.fromARGB(255, 207, 207, 207),
+              // Color.fromARGB(255, 77, 87, 87), // Color superior del gradiente
+              Color.fromARGB(255, 94, 94, 94), // Color inferior del gradiente
             ],
           ),
         ),
@@ -116,15 +116,12 @@ Future<void> signInWithGoogle(BuildContext context) async {
       accessToken: credential.accessToken ?? '',
     );
 
-    // Once signed in, navigate to the new component
-    // final UserCredential userCredential =
-    //     await FirebaseAuth.instance.signInWithCredential(credential);
-
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                HomeAlternative(usuario: usuario) )); // Reemplaza 'NewComponent' con el nombre de tu componente
+            builder: (context) => HomeAlternative(
+                usuario:
+                    usuario)));
   } catch (error) {
     // Show error message
     print("Inicio de sesión no exitoso: $error");

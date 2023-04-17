@@ -19,47 +19,72 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-
-
-    void completeLogin() {
-      Navigator.pushReplacement<void, void>(
-        context,
-        MaterialPageRoute<void>(
-          builder: (BuildContext context) =>  HomeLogin(),
-        ),
-      );
-    }
-
+ 
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Center(
-        child: Container(
-          height: 300,
-          child: Card(
-            child: Column(
-              children: [
-                Text(
-                  widget.usuario.displayName,
-                  style: const TextStyle(color: Colors.black),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 80,
+                backgroundImage: NetworkImage(widget.usuario.photoUrl),
+              ),
+              SizedBox(height: 16),
+              Text(
+                widget.usuario.displayName,
+                style:const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
-                Image.network(widget.usuario.photoUrl),
-                Text(
-                  widget.usuario.email,
-                  style: const TextStyle(color: Colors.black),
+              ),
+              SizedBox(height: 8),
+              Text(
+                widget.usuario.email,
+                style:const TextStyle(
+                  fontSize: 18,
+                  color: Colors.white54,
                 ),
-                Text(
-                  widget.usuario.displayName,
-                  style: const TextStyle(color: Colors.black),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
-                ElevatedButton(
-                  child: const Text("Cerrar sesión"),
-                  onPressed: () async {
-                    await _auth.signOut();
-                    await googleSignIn.signOut();
-                    completeLogin;
-                  },
+                child: const Row(
+                  mainAxisSize:  MainAxisSize.min,
+                  children: [
+                    Icon(Icons.logout, color: Colors.white),
+                    SizedBox(width: 8),
+                    Text(
+                      "Cerrar sesión",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+
+                onPressed: () async {
+                  await _auth.signOut();
+                  await googleSignIn.signOut();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeLogin()),
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),

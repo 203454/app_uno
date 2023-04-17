@@ -1,3 +1,4 @@
+import 'package:app_uno/classes/Usuario.dart';
 import 'package:flutter/material.dart';
 
 class ReadingBooks extends StatefulWidget {
@@ -11,9 +12,7 @@ class _ReadingBooksState extends State<ReadingBooks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text(
-        "HOLA ESTos son libros que estas leyendo"  
-        ),
+      body: Text("hola"),
     );
   }
 }
