@@ -1,4 +1,4 @@
-import 'package:app_uno/pages/recovery2.dart';
+import 'package:app_uno/pages/.ignore/recovery2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

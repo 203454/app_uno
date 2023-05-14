@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:app_uno/pages/recovery.dart';
+import 'package:app_uno/pages/.ignore/recovery.dart';
 
 class Registration extends StatelessWidget {
   const Registration({super.key});

@@ -11,7 +11,7 @@ class ReadingBooks extends StatefulWidget {
 class _ReadingBooksState extends State<ReadingBooks> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Text("hola"),
     );
   }

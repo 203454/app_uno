@@ -1,47 +1,43 @@
+import 'package:app_uno/features/posts/presentation/blocs/book_bloc.dart';
 import 'package:app_uno/pages/HomeLogin.dart';
+import 'package:app_uno/usecase_config.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_uno/pages/HomeAlternative.dart';
-import 'package:app_uno/pages/home_practica.dart';
+import 'package:app_uno/pages/.ignore/home_practica.dart';
 import 'package:app_uno/pages/notifications.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+UsecaseConfig usecaseConfig = UsecaseConfig();
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  // await initNotifications();
-  AwesomeNotifications().initialize(null, [
-    NotificationChannel(
-        channelKey: "basic_channel",
-        channelName: "Basic Notifications",
-        channelDescription: "notification channel description")
-  ]);
-
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-            // backgroundColor: Color.fromARGB(255, 198, 198, 198),
-            ),
-        // primarySwatch: Colors.red,
-        // primarySwatch: Colors.blue,
-        // brightness:Brightness.dark
-        scaffoldBackgroundColor: Color.fromARGB(255, 0, 0, 0),
-        // bottomAppBarTheme: const BottomAppBarTheme(
-        //   color: Color.fromARGB(255, 17, 0, 255),
-        // ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<BooksBloc>(
+            create: (BuildContext context) => BooksBloc(
+                  getBooksUsecase: usecaseConfig.getBookUsecase!,
+                  deleteBookUseCase: usecaseConfig.deleteBookUseCase!,
+                  updateBookUseCase: usecaseConfig.updateBookUseCase!,
+                  addBookUseCase: usecaseConfig.addBookUseCase!,
+                )),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const HomeAlternative(),
       ),
-      home: HomeLogin(),
     );
   }
 }

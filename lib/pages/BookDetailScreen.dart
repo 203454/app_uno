@@ -1,11 +1,15 @@
-import 'package:app_uno/pages/BookUpdateScreen.dart';
-import 'package:app_uno/pages/Notifications.dart';
+import 'package:app_uno/features/posts/data/models/book_model.dart';
+import 'package:app_uno/features/posts/domain/entities/book.dart';
+import 'package:app_uno/features/posts/presentation/blocs/book_bloc.dart';
+// import 'package:app_uno/pages/BookUpdateScreen.dart';
+// import 'package:app_uno/pages/Notifications.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BookDetailScreen extends StatefulWidget {
-  final Map<String, dynamic> book;
+  final BookModel book;
+
   const BookDetailScreen({Key? key, required this.book}) : super(key: key);
 
   @override
@@ -13,98 +17,34 @@ class BookDetailScreen extends StatefulWidget {
 }
 
 class _BookDetailScreenState extends State<BookDetailScreen> {
-  Dio dio = Dio();
-  int _sliderValue = 0;
+  late BooksBloc booksBloc;
+
+  double sliderValue = 0.0;
+  bool statusValue = false;
 
   @override
   void initState() {
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if (!isAllowed) {
-        AwesomeNotifications().requestPermissionToSendNotifications();
-      }
-    });
+    // TODO: implement initState
+    super.initState();
+    booksBloc = BlocProvider.of<BooksBloc>(context);
+    sliderValue = widget.book.actual.toDouble();
+    statusValue = widget.book.status;
   }
-
-  void _actualizarValor(BuildContext context) async {
-    try {
-      // Realizar la petición HTTP utilizando Dio
-      final response = await dio.put(
-        'http://192.168.243.154:8000/api/books/${widget.book['id']}/',
-        data: {
-          'titulo': widget.book['titulo'],
-          'autor': widget.book['autor'],
-          'editorial': widget.book['editorial'],
-          'nCapitulos': widget.book['nCapitulos'],
-          'isbq': widget.book['isbq'],
-          'npaginas': widget.book['npaginas'],
-          'paginaSave':
-              _sliderValue, // Enviar el valor del slider como datos en la petición
-        },
-      );
-
-      // Verificar si la petición fue exitosa
-      if (response.statusCode == 200) {
-        // Mostrar un mensaje de éxito
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Valor actualizado')),
-        );
-      } else {
-        // Mostrar un mensaje de error
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al actualizar el valor')),
-        );
-      }
-    } catch (error) {
-      // Mostrar un mensaje de error en caso de excepción
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $error')),
-      );
-    }
-  }
-
-  void eliminarDato(int id, BuildContext context) async {
-    print(id);
-
-    try {
-      // Realiza la petición HTTP DELETE
-      await dio.delete('http://192.168.243.154:8000/api/books/$id/',
-          options: Options(
-              sendTimeout: const Duration(milliseconds: 2500),
-              receiveTimeout: const Duration(milliseconds: 2500)));
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Libro eliminado exitosamente'),
-        ),
-      );
-      Navigator.pop(context);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error al eliminar el libro: $e'),
-        ),
-      );
-    }
-  }
-
-  void printBook() {
-    print(widget.book['id']);
-  }
-
-  triggerNotification() {
-    AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: 10,
-            channelKey: 'basic_channel',
-            title: 'Tengo que leer...',
-            body: '${widget.book['titulo']}!'));
-  }
+  // @override
+  // void initState() {
+  //   AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+  //     if (!isAllowed) {
+  //       AwesomeNotifications().requestPermissionToSendNotifications();
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     // paginaAact =
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.fromLTRB(
+        padding: const EdgeInsets.fromLTRB(
             16.0, 24.0, 16.0, 16.0), // Añadir margen superior
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -114,36 +54,39 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                 // transform: Matrix4.translationValues(0.0, -50.0, 0.0),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Color.fromARGB(255, 209, 165, 110),
-                      Color.fromARGB(255, 130, 130, 130),
+                    colors: const [
+                      Color.fromARGB(255, 56, 212, 4),
+                      Color.fromARGB(255, 54, 54, 54),
                     ],
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     stops: [
-                      _sliderValue / widget.book['npaginas'],
-                      _sliderValue / widget.book['npaginas'],
+                      sliderValue / widget.book.npaginas,
+                      sliderValue / widget.book.npaginas,
                     ],
                   ),
                 ),
                 child: Card(
                   color: Colors.transparent,
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: 400, // Tamaño deseado de ancho
-                          height: 400, // Tamaño deseado de alto
-                          child: Image.network(
-                            widget.book['portada'],
-                            fit: BoxFit.cover,
+                          width: 400,
+                          height: 400,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'), // URL de la imagen
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 16.0),
                         Text(
-                          "Libro: ${widget.book['titulo']}",
+                          "Libro: ${widget.book.titulo}",
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -151,119 +94,132 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 8.0),
+                        const SizedBox(height: 16.0),
                         // Mostrar valor de páginas leídas
                         Text(
-                          'Páginas leídas: ${widget.book['paginaSave']} de ${widget.book['npaginas']}',
+                          'Páginas leídas: ${sliderValue.toInt()} de ${widget.book.npaginas}',
                           style: const TextStyle(
                             fontSize: 16.0,
-                            color: Colors.grey,
+                            color: Color.fromARGB(255, 255, 255, 255),
                           ),
                         ),
-                        SizedBox(height: 16.0),
-
+                        const SizedBox(height: 16.0),
                         Slider(
-                          value: widget.book['paginaSave'].toDouble(),
+                          value: sliderValue,
                           min: 0,
-                          max: widget.book['npaginas'].toDouble(),
+                          max: widget.book.npaginas.toDouble(),
                           onChanged: (value) {
                             setState(() {
-                              widget.book['paginaSave'] = value.toInt();
-                              _sliderValue = widget.book['paginaSave'];
-                              if (_sliderValue ==
-                                  widget.book['npaginas'].toDouble()) {
-                                widget.book['status'] = true;
+                              sliderValue = value;
+                              if (sliderValue ==
+                                  widget.book.npaginas.toDouble()) {
+                                statusValue = true;
                               } else {
-                                widget.book['status'] = false;
+                                statusValue = false;
                               }
                             });
                           },
                         ),
                         const SizedBox(height: 16.0),
                         Text(
-                          "Autor: ${widget.book['autor']}",
+                          "Autor: ${widget.book.autor}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 16.0,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        SizedBox(height: 4.0),
-                        Text(
-                          "Editorial: '${widget.book['editorial'].toString()}",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.grey,
+                            color: Color.fromARGB(255, 255, 255, 255),
                           ),
                         ),
                         const SizedBox(height: 4.0),
                         Text(
-                          "Numero de capitulos: ${widget.book['nCapitulos'].toString()}",
+                          "Editorial: '${widget.book.editorial.toString()}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 16.0,
-                            color: Colors.grey,
+                            color: Color.fromARGB(255, 255, 255, 255),
+                          ),
+                        ),
+                        const SizedBox(height: 4.0),
+                        Text(
+                          "Numero de capitulos: ${widget.book.ncapitulos.toString()}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            color: Color.fromARGB(255, 255, 255, 255),
                           ),
                         ),
                         const SizedBox(height: 4.0),
                         AnimatedDefaultTextStyle(
                           style: TextStyle(
                             fontSize: 16.0,
-                            color: widget.book['status']
+                            color: widget.book.status
                                 ? Colors.green
-                                : Color.fromARGB(255, 137, 132, 131),
+                                : Color.fromARGB(255, 0, 0, 0),
                           ),
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           child: Text(
-                            widget.book['status'] ? 'Leido!' : 'Leyendo...',
+                            statusValue ? 'Leido!' : 'Leyendo...',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
 
-                        SizedBox(height: 4.0),
+                        const SizedBox(height: 4.0),
                       ],
                     ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 15.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 8.0),
-            
-                SizedBox(width: 10.0),
-                FloatingActionButton(
-                  onPressed: () {
-                    _actualizarValor(context);
+          ],
+        ),
+      ),
+      floatingActionButton: Align(
+        alignment: Alignment.bottomCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Book updatedBook = widget.book
+                    .copyWith(actual: sliderValue.toInt(), status: statusValue);
+                context.read<BooksBloc>().add(SliderValueChanged(updatedBook));
+              },
+              child: const Text('Guardar'),
+            ),
+            const SizedBox(width: 10.0),
+            ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Eliminar Libro'),
+                      content: const Text(
+                          '¿Estás seguro de que quieres eliminar este libro?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancelar'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            booksBloc.add(DeleteBooks(widget.book.id!));
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Eliminar'),
+                        ),
+                      ],
+                    );
                   },
-                  child: Icon(Icons.save),
-                  backgroundColor: Color.fromARGB(255, 143, 143, 143),
-                ),
-                SizedBox(width: 10.0),
-                FloatingActionButton(
-                  onPressed: () {
-                    eliminarDato(widget.book['id'], context);
-                  },
-                  child: Icon(Icons.delete),
-                  backgroundColor: Color.fromARGB(255, 222, 11, 11),
-                ),
-                SizedBox(width: 10.0),
-                FloatingActionButton(
-                  onPressed: () {
-                    showNotificacion(1, 'Tengo que leer', '${widget.book['titulo']}!');
-                  },
-                  child: Icon(Icons.notification_add),
-                  backgroundColor: Color.fromARGB(255, 15, 142, 149),
-                ),
-              ],
-            )
+                );
+              },
+              child: const Text('Eliminar'),
+            ),
           ],
         ),
       ),

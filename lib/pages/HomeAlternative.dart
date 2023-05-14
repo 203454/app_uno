@@ -1,31 +1,31 @@
 // import 'package:books_app/pages/News.dart';
-import 'package:app_uno/classes/Usuario.dart';
+
 import 'package:app_uno/pages/BookListPage.dart';
-import 'package:app_uno/pages/ReadingBooks.dart';
-import 'package:app_uno/pages/UserProfile.dart';
+import 'package:app_uno/pages/BookReadingPage.dart';
+import 'package:app_uno/pages/FormAddBook.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class HomeAlternative extends StatefulWidget {
-  final Usuario usuario;
-  const HomeAlternative({Key? key, required this.usuario});
+  const HomeAlternative({Key? key}) : super(key: key);
+
   @override
   State<HomeAlternative> createState() => _HomeAlternativeState();
 }
 
 class _HomeAlternativeState extends State<HomeAlternative> {
   late int _currentIndex = 0;
-  
+
   List<Widget> screens = []; // Declara la lista de screens
 
   @override
   void initState() {
-
     super.initState();
-    // Inicializa la lista   screens con widget.usuario disponible
+
     screens = [
-      BookListPage(usuario: widget.usuario),
-      UserProfile(usuario: widget.usuario),
+      const BookListPage(),
+      const BookReadingPage(),
+      const FormAddBook(),
     ];
   }
 
@@ -40,39 +40,42 @@ class _HomeAlternativeState extends State<HomeAlternative> {
               fontWeight: FontWeight.bold,
             )),
         centerTitle: true,
-        backgroundColor:
-            Colors.black, // Cambia el color de fondo de la AppBar a negro
+        backgroundColor: Colors.black,
         elevation: 6.0,
       ),
       body: screens[_currentIndex],
+      backgroundColor: Colors.black,
       bottomNavigationBar: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           margin: const EdgeInsets.only(bottom: 10, top: 10),
           child: GNav(
-              color: Color.fromARGB(255, 255, 255,
-                  255), // Cambia el color de los iconos y texto del GNav a gris
-              tabBackgroundColor: Colors
-                  .white, // Cambia el color de fondo de los tabs del GNav a blanco
+              color: const Color.fromARGB(255, 255, 255, 255),
+              tabBackgroundColor: Colors.white,
               selectedIndex: _currentIndex,
               tabBorderRadius: 10,
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               onTabChange: (index) => {setState(() => _currentIndex = index)},
               tabs: const [
                 GButton(
-                  icon: Icons.amp_stories_rounded,
-                  text: 'Librero',
-                  iconActiveColor:
-                      Color.fromARGB(255, 0, 0, 0), // Cambia el color del ícono activo a negro
-                  textColor: Colors.black, // Cambia el color del texto a negro
-                  backgroundColor: Colors
-                      .grey, // Cambia el color de fondo del tab activo a gris
+                  icon: Icons.menu_book_sharp,
+                  text: 'Leyendo',
+                  iconActiveColor: Color.fromARGB(255, 0, 0, 0),
+                  textColor: Colors.black,
+                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
                 ),
                 GButton(
-                  icon: Icons.account_box_rounded,
-                  text: 'Mi Cuenta',
-                  iconActiveColor: Colors.black,
+                  icon: Icons.menu_book_sharp,
+                  text: 'Leidos',
+                  iconActiveColor: Color.fromARGB(255, 0, 0, 0),
                   textColor: Colors.black,
-                  backgroundColor: Colors.white,
+                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                ),
+                GButton(
+                  icon: Icons.book_sharp,
+                  text: 'Añadir',
+                  iconActiveColor: Color.fromARGB(255, 0, 0, 0),
+                  textColor: Colors.black,
+                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
                 ),
               ])),
     );
