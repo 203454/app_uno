@@ -1,8 +1,8 @@
 // import 'package:books_app/pages/News.dart';
 
-import 'package:app_uno/pages/BookListPage.dart';
-import 'package:app_uno/pages/BookReadingPage.dart';
-import 'package:app_uno/pages/FormAddBook.dart';
+import 'package:app_uno/features/posts/presentation/pages/BookListPage.dart';
+import 'package:app_uno/features/posts/presentation/pages/BookReadingPage.dart';
+import 'package:app_uno/features/posts/presentation/pages/FormAddBook.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 

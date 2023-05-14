@@ -1,3 +1,5 @@
+/lib/features/posts/presentation/pages/.ignore
+
 # Miscellaneous
 *.class
 *.log
@@ -9,6 +11,8 @@
 .history
 .svn/
 migrate_working_dir/
+
+
 
 # IntelliJ related
 *.iml

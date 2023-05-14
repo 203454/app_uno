@@ -1,26 +1,27 @@
 import 'package:app_uno/features/posts/data/models/book_model.dart';
-import 'package:app_uno/pages/BookDetailScreen.dart';
+import 'package:app_uno/features/posts/presentation/pages/BookDetailScreen.dart';
+import 'package:app_uno/features/posts/presentation/pages/FormAddBook.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../features/posts/presentation/blocs/book_bloc.dart';
+import '../blocs/book_bloc.dart';
 
-class BookReadingPage extends StatefulWidget {
-  const BookReadingPage({Key? key}) : super(key: key);
+class BookListPage extends StatefulWidget {
+  const BookListPage({Key? key}) : super(key: key);
   @override
-  State<BookReadingPage> createState() => _BookReadingPage();
+  State<BookListPage> createState() => _BookListPageState();
 }
 
-class _BookReadingPage extends State<BookReadingPage> {
+class _BookListPageState extends State<BookListPage> {
   List<dynamic> books = [];
 
   @override
   void initState() {
     super.initState();
-    context.read<BooksBloc>().add(GetBooks(true));
+    context.read<BooksBloc>().add(GetBooks(false));
   }
 
   void _refreshView() {
-    context.read<BooksBloc>().add(GetBooks(true));
+    context.read<BooksBloc>().add(GetBooks(false));
   }
 
   @override
