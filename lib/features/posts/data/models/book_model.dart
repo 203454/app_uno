@@ -72,4 +72,31 @@ class BookModel extends Book {
       actual: book.actual,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'titulo': titulo,
+      'autor': autor,
+      'editorial': editorial,
+      'ncapitulos': ncapitulos,
+      'isbn': isbn,
+      'status': status,
+      'npaginas': npaginas,
+      'actual': actual,
+    };
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'titulo': titulo,
+      'autor': autor,
+      'editorial': editorial,
+      'ncapitulos': ncapitulos,
+      'isbn': isbn,
+      'status': status,
+      'npaginas': npaginas,
+      'actual': actual,
+    };
+  }
 }

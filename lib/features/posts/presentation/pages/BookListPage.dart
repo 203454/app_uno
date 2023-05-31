@@ -6,22 +6,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/book_bloc.dart';
 
 class BookListPage extends StatefulWidget {
-  const BookListPage({Key? key}) : super(key: key);
+  bool reading;
+  bool online;
+
+  BookListPage({Key? key, required this.reading, required this.online})
+      : super(key: key);
   @override
   State<BookListPage> createState() => _BookListPageState();
 }
 
 class _BookListPageState extends State<BookListPage> {
   List<dynamic> books = [];
+  late BooksBloc booksBloc;
 
   @override
   void initState() {
     super.initState();
-    context.read<BooksBloc>().add(GetBooks(false));
+    booksBloc = BlocProvider.of<BooksBloc>(context);
+    if (widget.online) {
+      context.read<BooksBloc>().add(GetBooks());
+    } else {
+      context.read<BooksBloc>().add(GetUsersOffline());
+    }
   }
 
-  void _refreshView() {
-    context.read<BooksBloc>().add(GetBooks(false));
+  void _refreshView(bool valRefresh) {
+    context.read<BooksBloc>().add(GetBooks());
   }
 
   @override
@@ -36,16 +46,18 @@ class _BookListPageState extends State<BookListPage> {
           } else if (state is Loaded) {
             return SingleChildScrollView(
               child: Column(
-                children: state.books.map((book) {
+                children: state.books
+                    .where((book) => book.status == widget.reading)
+                    .map((book) {
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookDetailScreen(
-                            book: BookModel.fromEntity(book),
-                          ),
-                        ),
+                            builder: (context) => BookDetailScreen(
+                                book: BookModel.fromEntity(book),
+                                online: widget.online,
+                                reading: widget.reading)),
                       );
                     },
                     child: Card(
@@ -134,13 +146,13 @@ class _BookListPageState extends State<BookListPage> {
       ),
       floatingActionButton: IconButton(
         onPressed: () {
-          _refreshView;
+          _refreshView(widget.reading!);
         },
         icon: const Icon(Icons.refresh),
         color: Colors.blue,
         splashColor: const Color.fromARGB(255, 0, 0, 0),
         highlightColor: Colors.green,
-        tooltip: 'Actualizar',
+        tooltip: 'Refrescar vista',
         iconSize: 24, // Tamaño del ícono
         padding: const EdgeInsets.all(8),
         constraints: const BoxConstraints(),

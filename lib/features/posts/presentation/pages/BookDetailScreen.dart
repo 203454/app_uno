@@ -1,16 +1,21 @@
+import 'dart:convert';
 import 'package:app_uno/features/posts/data/models/book_model.dart';
 import 'package:app_uno/features/posts/domain/entities/book.dart';
 import 'package:app_uno/features/posts/presentation/blocs/book_bloc.dart';
-// import 'package:app_uno/pages/BookUpdateScreen.dart';
-// import 'package:app_uno/pages/Notifications.dart';
+import 'package:app_uno/features/posts/presentation/pages/BookListPage.dart';
+import 'package:app_uno/services/local_storage.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BookDetailScreen extends StatefulWidget {
   final BookModel book;
+  final bool? online;
+  final bool? reading;
 
-  const BookDetailScreen({Key? key, required this.book}) : super(key: key);
+  const BookDetailScreen(
+      {Key? key, required this.book, this.online, this.reading})
+      : super(key: key);
 
   @override
   State<BookDetailScreen> createState() => _BookDetailScreenState();
@@ -18,7 +23,8 @@ class BookDetailScreen extends StatefulWidget {
 
 class _BookDetailScreenState extends State<BookDetailScreen> {
   late BooksBloc booksBloc;
-
+  String? userDataStr = "";
+  bool goHome = false;
   double sliderValue = 0.0;
   bool statusValue = false;
 
@@ -29,15 +35,14 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     booksBloc = BlocProvider.of<BooksBloc>(context);
     sliderValue = widget.book.actual.toDouble();
     statusValue = widget.book.status;
+    if (widget.online != null) {
+      if (widget.online == true) {
+        print('Estas en lines');
+      } else {
+        print('Estas offline');
+      }
+    }
   }
-  // @override
-  // void initState() {
-  //   AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-  //     if (!isAllowed) {
-  //       AwesomeNotifications().requestPermissionToSendNotifications();
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -183,9 +188,35 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           children: [
             ElevatedButton(
               onPressed: () {
-                Book updatedBook = widget.book
+                BookModel updatedBook = widget.book
                     .copyWith(actual: sliderValue.toInt(), status: statusValue);
-                context.read<BooksBloc>().add(SliderValueChanged(updatedBook));
+
+                if (widget.online == true) {
+                  context
+                      .read<BooksBloc>()
+                      .add(SliderValueChanged(updatedBook));
+                } else {
+                  String? jsonData = LocalStorage.prefs.getString('libros');
+
+                  if (jsonData != null) {
+                    List<dynamic> librosMap = jsonDecode(jsonData);
+
+                    int bookIndex = librosMap
+                        .indexWhere((libro) => libro['id'] == updatedBook.id);
+                    if (bookIndex != -1) {
+                      librosMap[bookIndex] = updatedBook.toJson();
+                    }
+                    String nuevoJsonData = jsonEncode(librosMap);
+
+                    LocalStorage.prefs.setString('libros', nuevoJsonData);
+                  }
+
+                  //Registrar evento update
+                  context
+                      .read<BooksBloc>()
+                      .add(AddEvent(SliderValueChanged(updatedBook)));
+                  context.read<BooksBloc>().add(GetUsersOffline());
+                }
               },
               child: const Text('Guardar'),
             ),
@@ -203,13 +234,47 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
+                            context.read<BooksBloc>().add(GetBooks());
                           },
                           child: const Text('Cancelar'),
                         ),
                         TextButton(
                           onPressed: () {
-                            booksBloc.add(DeleteBooks(widget.book.id!));
-                            Navigator.of(context).pop();
+                            if (widget.online == true) {
+                              context
+                                  .read<BooksBloc>()
+                                  .add(DeleteBooks(widget.book.id!));
+
+                              Future.delayed(Duration.zero, () {
+                                Navigator.of(context).pop();
+                                context.read<BooksBloc>().add(GetBooks());
+                              });
+                              // context.read<BooksBloc>().add(GetBooks());
+                              // Navigator.of(context).pop();
+                            } else {
+                              int? idBookToDelete = widget.book.id;
+
+                              String? jsonData =
+                                  LocalStorage.prefs.getString('libros');
+
+                              if (jsonData != null) {
+                                List<dynamic> librosMap = jsonDecode(jsonData);
+
+                                librosMap.removeWhere(
+                                    (libro) => libro['id'] == idBookToDelete);
+                                jsonData = jsonEncode(librosMap);
+
+                                LocalStorage.prefs
+                                    .setString('libros', jsonData);
+
+                                //Añadir evento delete a la lista
+                                context.read<BooksBloc>().add(
+                                    AddEvent(DeleteBooks(widget.book.id!)));
+                              }
+
+                              Navigator.of(context).pop();
+                              context.read<BooksBloc>().add(GetUsersOffline());
+                            }
                           },
                           child: const Text('Eliminar'),
                         ),

@@ -8,15 +8,3 @@ class UpdateBookUseCase {
     return await bookRepository.updateBook(book);
   }
 }
-
-// class DeleteBookUseCase {
-//   final BookRepository bookRepository;
-//   DeleteBookUseCase(this.bookRepository);
-//   Future<void> execute(int bookId) async {
-//     try {
-//       await bookRepository.deleteBook(bookId);
-//     } catch (e) {
-//       throw ('No se pudo eliminar el libro');
-//     }
-//   }
-// }

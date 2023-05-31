@@ -6,7 +6,7 @@ import 'package:app_uno/features/posts/domain/usecases/get_books_usecase.dart';
 import 'package:app_uno/features/posts/domain/usecases/update_book_usecase.dart';
 
 class UsecaseConfig {
-  GetBooksUsecase? getBookUsecase;
+  GetBooksUsecase? getBooksUsecase;
   BookRepositoryImpl? bookRepositoryImpl;
   BookRemoteDataSourceImp? bookRemoteDataSourceImp;
 
@@ -26,7 +26,7 @@ class UsecaseConfig {
     bookRemoteDataSourceImp = BookRemoteDataSourceImp();
     bookRepositoryImpl =
         BookRepositoryImpl(bookRemoteDataSource: bookRemoteDataSourceImp!);
-    getBookUsecase = GetBooksUsecase(bookRepositoryImpl!);
+    getBooksUsecase = GetBooksUsecase(bookRepositoryImpl!);
 
     bookRemoteDataSourceImpDelete = BookRemoteDataSourceImp();
     bookRepositoryImplDelete = BookRepositoryImpl(

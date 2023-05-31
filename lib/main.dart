@@ -1,18 +1,18 @@
 import 'package:app_uno/features/posts/presentation/blocs/book_bloc.dart';
-import 'package:app_uno/pages/HomeLogin.dart';
+import 'package:app_uno/services/local_storage.dart';
 import 'package:app_uno/usecase_config.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-
-import 'package:app_uno/pages/HomeAlternative.dart';
-import 'package:app_uno/pages/.ignore/home_practica.dart';
-import 'package:app_uno/pages/notifications.dart';
+import 'package:app_uno/features/posts/presentation/pages/HomeAlternative.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 UsecaseConfig usecaseConfig = UsecaseConfig();
+bool internetConnection = false;
 
 void main() async {
+  Connectivity connectivity = Connectivity();
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalStorage.configurePrefs();
   runApp(const MyApp());
 }
 
@@ -25,11 +25,10 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<BooksBloc>(
             create: (BuildContext context) => BooksBloc(
-                  getBooksUsecase: usecaseConfig.getBookUsecase!,
-                  deleteBookUseCase: usecaseConfig.deleteBookUseCase!,
-                  updateBookUseCase: usecaseConfig.updateBookUseCase!,
-                  addBookUseCase: usecaseConfig.addBookUseCase!,
-                )),
+                getBooksUsecase: usecaseConfig.getBooksUsecase!,
+                deleteBookUseCase: usecaseConfig.deleteBookUseCase!,
+                updateBookUseCase: usecaseConfig.updateBookUseCase!,
+                addBookUseCase: usecaseConfig.addBookUseCase!)),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

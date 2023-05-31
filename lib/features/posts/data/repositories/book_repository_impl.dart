@@ -8,8 +8,8 @@ class BookRepositoryImpl implements BookRepository {
   BookRepositoryImpl({required this.bookRemoteDataSource});
 
   @override
-  Future<List<Book>> getBooks(bool statusValue) async {
-    return await bookRemoteDataSource.getBooks(statusValue);
+  Future<List<Book>> getBooks() async {
+    return await bookRemoteDataSource.getBooks();
   }
 
   @override

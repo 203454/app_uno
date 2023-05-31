@@ -145,6 +145,9 @@ dependencies:
   awesome_notifications: ^0.7.4+1
   http: ^0.13.6
   flutter_bloc: ^8.1.2
+  connectivity_plus: ^4.0.0
+  shared_preferences: ^2.1.1
+  equatable: ^2.0.5
 
 
 dev_dependencies:
